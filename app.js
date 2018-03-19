@@ -1,10 +1,9 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const passport = require('passport');
+require('./config/passport')(passport);
+
 const app = express();
 const port = process.env.PORT || 5000;
-const passport = require('passport');
-
-require('./config/passport')(passport);
 
 // load routes
 const auth = require('./routes/auth');
@@ -15,6 +14,4 @@ app.get('/', (req, res) => {
   res.send('hi it works');
 });
 
-
-
-app.listen(port, console.log(`Running on port ${port}`));
+app.listen(port, console.log(`Server running at ${port}`));
