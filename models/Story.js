@@ -1,46 +1,48 @@
 const mongoose = require('mongoose');
 
-const { Schema } = mongoose;
+const Schema = mongoose.Schema;
 
+// Create Shema
 const StorySchema = new Schema({
-  title: {
+  title:{
     type: String,
-    required: true,
+    required: true
   },
-  body: {
+  body:{
     type: String,
-    required: true,
+    required: true
   },
   status: {
     type: String,
-    default: 'public'
+    default:'public'
   },
-  allowedComment: {
+  allowComments: {
     type: Boolean,
-    default: true
+    default:true
   },
   comments: [{
     commentBody: {
       type: String,
       required: true
     },
-    commentDate: {
+    commentDate:{
       type: Date,
-      default: Date.now,
-      commentUser: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
-      },
-      user: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
-      },
-      date: {
-        type: Date,
-        default: Date.now
-      }
+      default: Date.now
+    },
+    commentUser:{
+      type: Schema.Types.ObjectId,
+      ref:'users'
     }
   }],
+  user:{
+    type: Schema.Types.ObjectId,
+    ref:'users'
+  },
+  date:{
+    type: Date,
+    default: Date.now
+  }
 });
 
+// Create collection and add schema
 mongoose.model('stories', StorySchema, 'stories');

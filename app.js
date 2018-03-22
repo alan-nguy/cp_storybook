@@ -4,6 +4,7 @@ const exphbs = require('express-handlebars');
 const cookieParser = require('cookie-parser');
 const path = require('path')
 const keys = require('./config/keys');
+const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
@@ -14,20 +15,33 @@ require('./config/passport')(passport);
 const app = express();
 const port = process.env.PORT || 5000;
 
-// BODY PARSER MIDDLEWARE
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-// HANDLEBARS MIDDLEWARES
-app.engine('handlebars', exphbs({
-  defaultLayout: 'main'
-}));
-app.set('view engine', 'handlebars');
+const {truncate, stripTags, formatDate, select, editIcon } = require('./helpers/hbs');
 
 // load routes
 const auth = require('./routes/auth');
 const index = require('./routes/index');
 const stories = require('./routes/stories');
+
+// BODY PARSER MIDDLEWARE
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// METHOD OVERRIDE MIDDLEWARE
+app.use(methodOverride('_method'));
+
+// HANDLEBARS MIDDLEWARES
+app.engine('handlebars', exphbs({
+  helpers: {
+    truncate,
+    stripTags, 
+    formatDate,
+    select,  
+    editIcon
+  },
+  defaultLayout: 'main'
+}));
+app.set('view engine', 'handlebars');
+
 
 // CONNECT TO DB
 mongoose.Promise = global.Promise;
